@@ -52,6 +52,10 @@ li {
     background: #eeeeee;
 }
 
+.li:hover {
+    background-color: green;
+}
+
 ul {
     list-style: none;
 }
