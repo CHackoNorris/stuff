@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIOLOGIE 10.2</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fontawesome/css/all.css">
+    <link rel="stylesheet" href="navigationsleiste.css">
+    <script src="navigationsleiste.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div id="hauptnavigation">
+            <div class="logobereich">
+                <a href="index.html" class="nav-logo"></a>
+            </div>
+            <div class="navigationsbereich">
+                <div class="nav-oben">
+                    <a href="mailto:biologie10.2@gmx.de" class="nav-link">
+                        <i class="fas fa-envelope nav-icon"></i>
+                        biologie10.2@gmx.de
+                    </a>
+                    <div class="nav-socials">
+                        <a href="https://instagram.com" class="nav-link"><i class="fab fa-instagram nav-icon"></i></a>
+                        <a href="https://facebook.com" class="nav-link"><i class="fab fa-facebook nav-icon"></i></a>
+                        <a href="https://twitter.com" class="nav-link"><i class="fab fa-twitter-square nav-icon"></i></a>
+                    </div>
+                </div>
+                <div class="nav-unten">
+                    <div class="navigationspunkte">
+                        <a href="index.html" class="nav-punkt nav-link aktiv">Home</a>
+                        <a href="genetik.html" class="nav-punkt nav-link">Genetik</a>
+                        <a href="evolution.html" class="nav-punkt nav-link">Evolution</a>
+                        <a href="" class="nav-punkt nav-link">--</a>
+                        <a href="" class="nav-punkt nav-link">--</a>
+                    </div>
+                    <div class="nav-suchbereich">
+                        <i class="fas fa-search nav-icon"></i>
+                        <input type="text" class="nav-suchfeld">
+                    </div>
+                </div>
+            </div>
+            <a href="javascript:void(0);" class="hamburger-icon" onclick="navigationUmschalten()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+    </header>
+    <div class="hauptbehaelter" id="hauptbehaelter">
+        <h1>Biologie</h1>
+        <section class="padding-lr20">
+            <img src="bilder/dnastrang.png" alt="DNA STRANG">
+            <p>Hey zusammen, da Biologie nicht einfacher wird habe ich beschlossen eine kleine Hilfe zu Programmieren. Die Website
+				ist recht simple aufgebaut und könnte dem ein oder anderen vor Arbeiten helfen. Hier Probiere ich alles einfach zu 
+				erklären, allerdings werde ich auch Fachwörter verwenden. Bei den meisten werde ich eine weitere Seite Programmieren
+				um schwierige oder unbekannte begriffe zu erleutnen. Gibt es allerdings trotzdem Wörter die ihr nicht versteht so könnt 
+				ihr mich gerne ansprechen ob im Reallife oder im Netz werde ich euch antworten und probieren weiter zu helfen.</p>
+            <p></p>
+			<p id="demo"></p>
+
+<script>
+// Set the date we're counting down to
+var countDownDate = new Date("Sep 21, 2021 15:45:00").getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get today's date and time
+  var now = new Date().getTime();
+
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  // Display the result in the element with id="demo"
+  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+  + minutes + "m " + seconds + "s ";
+
+  // If the count down is finished, write some text
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("demo").innerHTML = "EXPIRED";
+  }
+}, 1000);
+</script>
+            <!--<p>Pikachu ist das Maskottchen im Anime und das Pokémon mit dem höchsten Bekanntheitsgrad und das Maskottchen des
+                Pokémon-Franchises</p>
+        </section>    
+        <section>
+            <h2>Attacken</h2>
+            <div class="tabellenbehaelter">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="4">Durch Levelaufstieg</th>
+                        </tr>
+                        <tr>
+                            <th>Level</th>
+                            <th>Attacke</th>
+                            <th>Typ</th>
+                            <th>AP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Donnerschock</td>
+                            <td>Elektro</td>
+                            <td>30</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Heuler</td>
+                            <td>Normal</td>
+                            <td>40</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Donnerwelle</td>
+                            <td>Elektro</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td>Ruckzuckhieb</td>
+                            <td>Normal</td>
+                            <td>30</td>
+                        </tr>
+                        <tr>
+                            <td>26</td>
+                            <td>Sternschauer</td>
+                            <td>Normal</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>33</td>
+                            <td>Agilität</td>
+                            <td>Psycho</td>
+                            <td>30</td>
+                        </tr>
+                        <tr>
+                            <td>43</td>
+                            <td>Donner</td>
+                            <td>Elektro</td>
+                            <td>10</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="4">Durch TM/VM</th>
+                        </tr>
+                        <tr>
+                            <th>TM/VM</th>
+                            <th>Attacke</th>
+                            <th>Typ</th>
+                            <th>AP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TM01</td>
+                            <td>Megahieb</td>
+                            <td>Normal</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>TM05</td>
+                            <td>Megakick</td>
+                            <td>Normal</td>
+                            <td>5</td>
+                        </tr>
+                        <tr>
+                            <td>TM06</td>
+                            <td>Toxin</td>
+                            <td>Gift</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>TM08</td>
+                            <td>Bodyslam</td>
+                            <td>Normal</td>
+                            <td>15</td>
+                        </tr>
+                        <tr>
+                            <td>TM09</td>
+                            <td>Bodycheck</td>
+                            <td>Normal</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>TM10</td>
+                            <td>Risikotackle</td>
+                            <td>Normal</td>
+                            <td>15</td>
+                        </tr>
+                        <tr>
+                            <td>TM16</td>
+                            <td>Zahltag</td>
+                            <td>Normal</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>TM17</td>
+                            <td>Überroller</td>
+                            <td>Kampf</td>
+                            <td>25</td>
+                        </tr>
+                        <tr>
+                            <td>TM19</td>
+                            <td>Geowurf</td>
+                            <td>Kampf</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>TM20</td>
+                            <td>Raserei</td>
+                            <td>Normal</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>TM24</td>
+                            <td>Donnerblitz</td>
+                            <td>Elektro</td>
+                            <td>15</td>
+                        </tr>
+                        <tr>
+                            <td>TM25</td>
+                            <td>Donner</td>
+                            <td>Elektro</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>TM31</td>
+                            <td>Mimikry</td>
+                            <td>Normal</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>TM32</td>
+                            <td>Doppelteam</td>
+                            <td>Normal</td>
+                            <td>15</td>
+                        </tr>
+                        <tr>
+                            <td>TM33</td>
+                            <td>Reflektor</td>
+                            <td>Psycho</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>TM34</td>
+                            <td>Geduld</td>
+                            <td>Normal</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>TM39</td>
+                            <td>Sternschauer</td>
+                            <td>Normal</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>TM40</td>
+                            <td>Schädelwumme</td>
+                            <td>Normal</td>
+                            <td>15</td>
+                        </tr>
+                        <tr>
+                            <td>TM44</td>
+                            <td>Erholung</td>
+                            <td>Psycho</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>TM45</td>
+                            <td>Donnerwelle</td>
+                            <td>Elektro</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>TM50</td>
+                            <td>Delegator</td>
+                            <td>Normal</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>VM05</td>
+                            <td>Blitz</td>
+                            <td>Elektro</td>
+                            <td>20</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section>
+            <h2>Pikachu in der realen Welt</h2>
+            <ul class="padding-lr20">
+                <li>Japanische Forscher des Osaka Bioscience Institute benannten nach dem Pokémon ein neu
+                    entdecktes
+                    Protein: Das Pikachurin, welchem eine Rolle beim Bewegungssehen zugeschrieben wird. Es wurde
+                    nach
+                    Pikachus Schnelligkeit benannt.</li>
+                <li>In den USA wurde ein amerikanischer Schulbus umgebaut, gelb lackiert und so entstand der
+                    legendäre
+                    Pikachu-Bus, der auch auf den deutschen Pokémon Days bis einschließlich 2010 dabei war.</li>
+                <li>Pikachu wurde 2001 auf den Niue-Dollar gedruckt.</li>
+                <li>Pikachu war 2014 das offizielle WM-Maskottchen der japanischen Fußball-Nationalmannschaft
+                </li>
+            </ul>
+        </section>
+    </div>
+</body>
+
+</html>
