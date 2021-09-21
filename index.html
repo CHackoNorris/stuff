@@ -63,10 +63,11 @@
 			<li><a href="genetik.html">Genetik</a></li>
 			<li><a href="evolution.html">Evolution</a></li>
 		 </ul>
+		<p>Der Countdown zeigt an wie viel Zeit bis zur nächsten Abreit verbleiben:</p>
 			<p id="demo"></p>
 
 <script>
-var countDownDate = new Date("Sep 21, 2021 15:50:00").getTime();
+var countDownDate = new Date("Sep 22, 2021 20:00:00").getTime();
 var x = setInterval(function() {
   var now = new Date().getTime();
   var distance = countDownDate - now;
@@ -78,7 +79,7 @@ var x = setInterval(function() {
   + minutes + "m " + seconds + "s ";
   if (distance < 0) {
     clearInterval(x);
-    document.getElementById("demo").innerHTML = "EXPIRED";
+    document.getElementById("demo").innerHTML = "N/A";
   }
 }, 1000);
 </script>
