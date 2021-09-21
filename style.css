@@ -52,7 +52,7 @@ li {
     background: #eeeeee;
 }
 
-.li:hover {
+li:hover {
     background-color: green;
 }
 
