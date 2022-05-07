@@ -1,0 +1,13 @@
+body {
+	background-color: black;
+}
+h1 {
+	color: white;
+	font-family: teko, sans-serif;
+}
+p {
+	color: white;
+	font-family: sans-serif;
+	font-size: 20px;
+	text-align: left;
+}
