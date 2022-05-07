@@ -1,6 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>LOGIN</title>
+  <title>B4Z4R</title>
+  <link rel="stylesheet" href="./style.css">
+
 </head>
 <script type = "text/javascript">
 
@@ -21,7 +25,7 @@ break;
 }
 
 if (valid) {
-<!--alert ("Login was successful");-->
+alert ("Login was successful");
 window.location = "https://chackonorris.github.io/stuff/websites/site1/stories/first.html";
 return false;
 }
@@ -50,11 +54,23 @@ return false;
 }
 
 </script>
+<body>
+<!-- partial:index.partial.html -->
+<div id="bg"></div>
 
 <form name = "myform">
-<p>ENTER USER NAME <input type="text" name="username"></p>
-<p>ENTER PASSWORD <input type="password" name="pword"></p>
-<p><input type="button" value="Check In" name="Submit" onclick= "validate()">
-</p>
-
+  <div class="form-field">
+    <input type="text" name="username" placeholder="USERNAME" required/>
+  </div>
+  
+  <div class="form-field">
+    <input type="password" name="pword" placeholder="PASSWORD" required/>                         </div>
+  
+  <div class="form-field">
+    <button class="btn" value="Check In" type="submit" onclick= "validate()">Log in</button>
+  </div>
 </form>
+<!-- partial -->
+  
+</body>
+</html>
