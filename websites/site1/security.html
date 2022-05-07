@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en" >
 <head>
   <meta charset="UTF-8">
   <title>B4Z4R</title>
@@ -14,8 +12,8 @@ var un = document.myform.username.value;
 var pw = document.myform.pword.value;
 var valid = false;
 
-var unArray = ["karla", "Karla", "levi", "Levi"];  // as many as you like - no comma after final entry
-var pwArray = ["stories", "Stories"];  // the corresponding passwords;
+var unArray = ["karla"];  // as many as you like - no comma after final entry
+var pwArray = ["stories"];  // the corresponding passwords;
 
 for (var i=0; i <unArray.length; i++) {
 if ((un == unArray[i]) && (pw == pwArray[i])) {
@@ -59,18 +57,12 @@ return false;
 <div id="bg"></div>
 
 <form name = "myform">
-  <div class="form-field">
-    <input type="text" name="username" placeholder="USERNAME" required/>
-  </div>
-  
-  <div class="form-field">
-    <input type="password" name="pword" placeholder="PASSWORD" required/>                         </div>
-  
-  <div class="form-field">
-    <button class="btn" value="Check In" type="submit" onclick= "validate()">Log in</button>
-  </div>
-</form>
+<input type="text" name="username" placeholder="username" required >
+<br>
+<input type="password" name="pword" placeholder="password" required >
+<br>
+<p><input class="btn" type="button" value="Check In" name="Submit" onclick= "validate()">
+</p>
 <!-- partial -->
   
 </body>
-</html>
