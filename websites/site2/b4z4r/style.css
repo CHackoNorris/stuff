@@ -1,3 +1,13 @@
+#bg {
+  background-image: url('img/FE3A3F49-EA32-4D59-A922-9540B832C8EA.jpeg');
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  filter: blur(5px);
+}
 body {
   background-color: #36393F;
 }
