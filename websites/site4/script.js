@@ -67,7 +67,8 @@ const phrases = [
 'just as I did',
 'that there\'s a difference',
 'between knowing the path',
-'and walking the path'];
+'and walking the path',
+'break the circle'];
 
 
 const el = document.querySelector('.text');
