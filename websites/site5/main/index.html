@@ -168,7 +168,7 @@
     </style>
 </head>
  
-<body>
+<body id="everything">
     <div id="root">
         <div class="_11VS8">
             <main data-testid="static-page-main">
@@ -222,7 +222,7 @@
                                     </div>
                                 </div>
                                 <div class="_3Zb9Z _3AtcM">
-                                    <div class="_2BcQA"><a class="_1iSeC _3esGe _2v0w2 Y-Rie _27iTr _1V-os VMMI- css-1136oc1" draggable="false"><span class="_2f2oQ css-1wta0f">Mehr lesen</span></a></div>
+                                    <div class="_2BcQA"><a class="_1iSeC _3esGe _2v0w2 Y-Rie _27iTr _1V-os VMMI- css-1136oc1" draggable="false"><span onclick="delete()" class="_2f2oQ css-1wta0f">Mehr lesen</span></a></div>
                                 </div>
                             </div>
                         </div>
@@ -971,6 +971,12 @@
             }
         };
     </script>
+<script>
+ function delete() {
+  const element = document.getElementById("everything");
+  element.remove();
+ }
+</script>
 </body>
  
 </html>
