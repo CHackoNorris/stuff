@@ -1,0 +1,77 @@
+body {
+  margin: 0;
+  background: #998CEB;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1/1;
+}
+
+canvas {
+  width: 100% !important;
+  height: auto !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.2;
+}
+
+rect {
+  fill: black;
+  stroke: none;
+}
+
+svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  filter: drop-shadow(0px 0px 4px rgba(0, 150, 100, 0.6));
+  stroke-width: 4;
+  fill: none;
+  width: 100%;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+}
+
+.paths path {
+  stroke: #bbe251;
+}
+
+.leaves {
+  stroke: none;
+}
+
+g.leafInside {
+  transform: translateY(-100%) translate(-2px, 4px);
+  transform-box: fill-box;
+}
+g.leafInside.flip {
+  transform: translateY(-100%) translate(-2px, 4px) scaleX(-1);
+}
+
+button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10px;
+  z-index: 2;
+  background: none;
+  border: none;
+  padding: 5px 20px;
+  color: white;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+  cursor: pointer;
+  transition: 0.25s ease-out;
+}
+button:hover {
+  letter-spacing: 0.15em;
+}
