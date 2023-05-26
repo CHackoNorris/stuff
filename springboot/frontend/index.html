@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title id="title">Calculator</title>
+</head>
+<style type="text/css" id="help">
+  #help{ display:none; }
+  #headline{ font-family: sans-serif; }
+</style>
+<body>
+  <h1 id="headline">Calculator</h1>
+
+  <input type="text" id="result" readonly><br><br>
+
+  <button id="one" onclick="appendToResult('1')">1</button>
+  <button id="two" onclick="appendToResult('2')">2</button>
+  <button id="three" onclick="appendToResult('3')">3</button>
+  <button id="plus" onclick="appendToResultO('+')" disabled>+</button><br>
+
+  <button id="four" onclick="appendToResult('4')">4</button>
+  <button id="five" onclick="appendToResult('5')">5</button>
+  <button id="six" onclick="appendToResult('6')">6</button>
+  <button id="minus" onclick="appendToResultO('-')" disabled>-</button><br>
+
+  <button id="seven" onclick="appendToResult('7')">7</button>
+  <button id="eight" onclick="appendToResult('8')">8</button>
+  <button id="nine" onclick="appendToResult('9')">9</button>
+  <button id="mul" onclick="appendToResultO('*')" disabled>*</button><br>
+
+  <button id="zero" onclick="appendToResult('0')">0</button>
+  <button id="point" onclick="appendToResult('.')">.</button>
+  <button id="goal" onclick="calculateResult()" disabled>=</button>
+  <button id="div" onclick="appendToResultO('/')" disabled>/</button><br>
+
+  <button onclick="clearResult()">Clear</button>
+  <button id="lparen" onclick="appendToResult('(')">(</button>
+  <button id="rparen" onclick="appendToResult(')')">)</button>
+  <button id="help" onclick="window.location.href='https://www.youtube.com/watch?v=dQw4w9WgXcQ';">Help</button><br>
+  <button id="help" onclick="calculateResult()">God Calculation</button>
+
+  <script>
+    var fail = 0;
+    var one = 0;
+      function appendToResult(value) {
+        document.getElementById("result").value += value;
+        one = 0;
+        document.getElementById("plus").removeAttribute("disabled");
+        document.getElementById("minus").removeAttribute("disabled");
+        document.getElementById("div").removeAttribute("disabled");
+        document.getElementById("mul").removeAttribute("disabled");
+        document.getElementById("goal").removeAttribute("disabled");
+      }
+
+      function appendToResultO(value) {
+        document.getElementById("result").value += value;
+        one = 0;
+        document.getElementById("plus").setAttribute("disabled", "");
+        document.getElementById("minus").setAttribute("disabled", "");
+        document.getElementById("div").setAttribute("disabled", "");
+        document.getElementById("mul").setAttribute("disabled", "");
+        document.getElementById("goal").setAttribute("disabled", "");
+      }
+      function disableEverything() {
+        document.getElementById("plus").setAttribute("disabled", "");
+              document.getElementById("minus").setAttribute("disabled", "");
+              document.getElementById("div").setAttribute("disabled", "");
+              document.getElementById("mul").setAttribute("disabled", "");
+              document.getElementById("goal").setAttribute("disabled", "");
+              document.getElementById("one").setAttribute("disabled", "");
+              document.getElementById("two").setAttribute("disabled", "");
+              document.getElementById("three").setAttribute("disabled", "");
+              document.getElementById("four").setAttribute("disabled", "");
+              document.getElementById("five").setAttribute("disabled", "");
+              document.getElementById("six").setAttribute("disabled", "");
+              document.getElementById("seven").setAttribute("disabled", "");
+              document.getElementById("eight").setAttribute("disabled", "");
+              document.getElementById("nine").setAttribute("disabled", "");
+              document.getElementById("zero").setAttribute("disabled", "");
+              document.getElementById("point").setAttribute("disabled", "");
+      }
+
+      function calculateResult() {
+        const expression = document.getElementById("result").value;
+        const url = 'http://localhost:8080/calculate';
+
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json')
+        headers.append('Access-Control-Allow-Origin', '*');
+
+        const requestOptions = {
+            method: 'GET',
+            headers: headers,
+        };
+        fetch("http://localhost:8080/calculate?expression=" + encodeURIComponent(expression))
+          .then(response => response.json())
+          .then(result => {
+            if (result == "[object Object]") { 
+              result = "An error occurred 無効入力";
+              document.getElementById("result").value = result;
+              disableEverything()
+            } else if (result == "Infinity") {
+              result = "Not allowed to divide by 0!";
+              document.getElementById("result").value = result;
+              disableEverything()
+            } else if (result == "NaN") {
+              result = "Not allowed to divide by 0!";
+              document.getElementById("result").value = result;
+              disableEverything()
+              console.log(result.status)
+              document.getElementById("result").value = resultconsole.log(result.status)
+              document.getElementById("result").value = result
+            } else {
+              console.log(result.status)
+            document.getElementById("result").value = result
+            }
+          })
+          .catch(error => {
+            console.error("An error occurred ばかx: ", error);
+
+          });
+          one = 0;
+      }
+      function clearResult() {
+        document.getElementById("result").value = "";
+        one = one + 1;
+        document.getElementById("plus").setAttribute("disabled", "");
+        document.getElementById("minus").setAttribute("disabled", "");
+        document.getElementById("div").setAttribute("disabled", "");
+        document.getElementById("mul").setAttribute("disabled", "");
+        document.getElementById("goal").setAttribute("disabled", "");
+        document.getElementById("one").removeAttribute("disabled");
+        document.getElementById("two").removeAttribute("disabled");
+        document.getElementById("three").removeAttribute("disabled");
+        document.getElementById("four").removeAttribute("disabled");
+        document.getElementById("five").removeAttribute("disabled");
+        document.getElementById("six").removeAttribute("disabled");
+        document.getElementById("seven").removeAttribute("disabled");
+        document.getElementById("eight").removeAttribute("disabled");
+        document.getElementById("nine").removeAttribute("disabled");
+        document.getElementById("zero").removeAttribute("disabled");
+        document.getElementById("point").removeAttribute("disabled");
+        if (one == 3){
+          document.getElementById("help").remove();
+          document.getElementById("result").removeAttribute("readonly");
+          document.getElementById("title").textContent="God Mode Calculator";
+          document.getElementById("headline").textContent="God Mode Calculator";
+          alert("God Mode Activated");
+          console.log("God Mode Activated");
+        } else if (one == 10){
+          window.location.reload();
+        }
+      }
+  </script>
+</body>
+</html>
+
