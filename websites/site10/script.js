@@ -1,6 +1,7 @@
 function playMusic() {
     var audio = new Audio('music.mp3');
     audio.play();
+    return "done.";
 }
 
 window.addEventListener('DOMContentLoaded', (event) => {
