@@ -1,7 +1,7 @@
 function playMusic() {
     var audio = new Audio('music.mp3');
     audio.play();
-    return "done.";
+    return "Миллион алых роз";
 }
 
 window.addEventListener('DOMContentLoaded', (event) => {
