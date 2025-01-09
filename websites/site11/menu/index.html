@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative Menu Hover Effects</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rajdhani', sans-serif;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #dcd9cd;
+    }
+    ul {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-gap: 20px;
+      padding: 0;
+    }
+    ul li {
+      list-style: none;
+      text-align: center;
+    }
+    ul li a {
+      color: #333;
+      text-decoration: none;
+      font-size: 1.5em;
+      padding: 10px 20px;
+      display: inline-block;
+      font-weight: 700;
+      transition: 0.5s;
+      position: relative;
+    }
+    ul:hover li a {
+      color: #0002;
+    }
+    ul li:hover a {
+      color: #000;
+      background: transparent;
+    }
+    ul li a:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 40%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 5em;
+      color: rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 500px;
+      transition: letter-spacing 0.5s, left 0.5s;
+    }
+    ul li a:hover:before {
+      content: attr(data-text);
+      opacity: 1;
+      left: 50%;
+      letter-spacing: 10px;
+      width: 1800px;
+      height: 1800px;
+    }
+    ul li:nth-child(6n + 1) a:before {
+      background: #0470fe;
+    }
+    ul li:nth-child(6n + 2) a:before {
+      background: #ff7675;
+    }
+    ul li:nth-child(6n + 3) a:before {
+      background: #1582fe;
+    }
+    ul li:nth-child(6n + 4) a:before {
+      background: #a29bfe;
+    }
+    ul li:nth-child(6n + 5) a:before {
+      background: #fd79a8;
+    }
+    ul li:nth-child(6n + 6) a:before {
+      background: #ffeaa7;
+    }
+  </style>
+</head>
+<body>
+  <ul>
+    <li><a target="_blank" href="../abc/a.html" data-text="A">A</a></li>
+    <li><a target="_blank" href="../abc/b.html" data-text="B">B</a></li>
+    <li><a target="_blank" href="../abc/c.html" data-text="C">C</a></li>
+    <li><a target="_blank" href="../abc/d.html" data-text="D">D</a></li>
+    <li><a target="_blank" href="../abc/e.html" data-text="E">E</a></li>
+    <li><a target="_blank" href="../abc/f.html" data-text="F">F</a></li>
+    <li><a target="_blank" href="../abc/g.html" data-text="G">G</a></li>
+    <li><a target="_blank" href="../abc/h.html" data-text="H">H</a></li>
+    <li><a target="_blank" href="../abc/i.html" data-text="I">I</a></li>
+    <li><a target="_blank" href="../abc/j.html" data-text="J">J</a></li>
+    <li><a target="_blank" href="../abc/k.html" data-text="K">K</a></li>
+    <li><a target="_blank" href="../abc/l.html" data-text="L">L</a></li>
+    <li><a target="_blank" href="../abc/m.html" data-text="M">M</a></li>
+    <li><a target="_blank" href="../abc/n.html" data-text="N">N</a></li>
+    <li><a target="_blank" href="../abc/o.html" data-text="O">O</a></li>
+    <li><a target="_blank" href="../abc/p.html" data-text="P">P</a></li>
+    <li><a target="_blank" href="../abc/q.html" data-text="Q">Q</a></li>
+    <li><a target="_blank" href="../abc/r.html" data-text="R">R</a></li>
+    <li><a target="_blank" href="../abc/s.html" data-text="S">S</a></li>
+    <li><a target="_blank" href="../abc/t.html" data-text="T">T</a></li>
+    <li><a target="_blank" href="../abc/u.html" data-text="U">U</a></li>
+    <li><a target="_blank" href="../abc/v.html" data-text="V">V</a></li>
+    <li><a target="_blank" href="../abc/w.html" data-text="W">W</a></li>
+    <li><a target="_blank" href="../abc/x.html" data-text="X">X</a></li>
+    <li><a target="_blank" href="../abc/y.html" data-text="Y">Y</a></li>
+    <li><a target="_blank" href="../abc/z.html" data-text="Z">Z</a></li>    
+  </ul>
+</body>
+</html>
