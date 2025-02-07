@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">Flüsse in deinem Ort</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+    <script>
+        function checkAnswer() {
+            const river1 = document.getElementById('river1').value.toLowerCase();
+            const river2 = document.getElementById('river2').value.toLowerCase();
+            const river3 = document.getElementById('river3').value.toLowerCase();
+
+            const correctAnswer = ['blau', 'ach', 'tiefental'];
+            const userAnswer = [river1, river2, river3];
+
+            // Überprüfen, ob die Eingabe alle Flüsse einmal enthält und keine Wiederholung
+            const isValid = userAnswer.every((river, index, self) => self.indexOf(river) === index) &&
+                            correctAnswer.every(river => userAnswer.includes(river));
+
+            // Wenn die Eingabe korrekt ist, speichere den Zustand
+            document.getElementById('isValid').value = isValid ? 'true' : 'false';
+        }
+
+        function handleSubmit() {
+            const isValid = document.getElementById('isValid').value === 'true';
+
+            const otherRivers = ['fuhse', 'osterbach', 'osterbruchsgraben', 'umfluteter lengede', 'großer bach', 'welle'];
+            const river1 = document.getElementById('river1').value.toLowerCase();
+            const river2 = document.getElementById('river2').value.toLowerCase();
+            const river3 = document.getElementById('river3').value.toLowerCase();
+            const userAnswer = [river1, river2, river3];
+
+            // Überprüfen auf die Flüsse des anderen Ortes
+            const isOtherPlace = userAnswer.some(river => otherRivers.includes(river));
+
+            if (isOtherPlace) {
+                alert("Ein anderer Ort ist gemeint. Dies ist NICHT der Ort des Mail-Inhabers.");
+                document.getElementById('question').innerText = "Welche Flüsse laufen in Arturs Ort?";
+				document.getElementById('title').innerText = "Flüsse in Arturs Ort";
+            } else if (!isValid) {
+                alert("Falsche Eingabe");
+            } else {
+                // Weiterleitung auf Google, wenn die Eingabe korrekt ist
+                window.location.href = './sifa2.html';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <h1 id="question">Welche Flüsse laufen in deinem Ort?</h1>
+        <form>
+            <input type="text" id="river1" placeholder="Fluss 1" oninput="checkAnswer()">
+            <br>
+            
+            <input type="text" id="river2" placeholder="Fluss 2" oninput="checkAnswer()">
+            <br>
+            
+            <input type="text" id="river3" placeholder="Fluss 3" oninput="checkAnswer()">
+            <br>
+
+            <!-- Unsichtbares Eingabefeld, um den Validierungsstatus zu speichern -->
+            <input type="hidden" id="isValid" value="false">
+            
+            <button type="button" onclick="handleSubmit()">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

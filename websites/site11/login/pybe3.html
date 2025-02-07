@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lieblingsfarbe</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #878787;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+            position: relative;
+        }
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.5s ease, background-color 0.5s ease;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2 id="questionText">Was ist deine Lieblingsfarbe?</h2>
+    <form id="quizForm">
+        <input type="text" id="userInput" placeholder="Hex-Code" value="#007bff" required>
+        <button type="submit" id="submitButton">Absenden</button>
+    </form>
+</div>
+
+<script>
+    const inputField = document.getElementById("userInput");
+    const submitButton = document.getElementById("submitButton");
+    
+    function updateButtonColor() {
+        const color = inputField.value.trim();
+        if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
+            submitButton.style.backgroundColor = color;
+        }
+    }
+
+    inputField.addEventListener("input", updateButtonColor);
+
+    document.getElementById("quizForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        const color = inputField.value.trim();
+        
+        // Button fährt nach unten
+        submitButton.style.transform = "translateY(70px)";
+        
+        setTimeout(() => {
+            if (color === "#878787") {
+                submitButton.style.backgroundColor = "green";
+                setTimeout(() => {
+                    window.location.href = "https://www.google.com";
+                }, 1000);
+            } else {
+                submitButton.style.backgroundColor = "red";
+                setTimeout(() => {
+                    submitButton.style.transform = "translateY(0px)";
+                    updateButtonColor();
+                }, 1000);
+            }
+        }, 1000);
+    });
+
+    updateButtonColor();
+</script>
+
+</body>
+</html>
