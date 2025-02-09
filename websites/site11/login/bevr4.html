@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koordinaten Eingabe</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input {
+            width: 25%; /* Eingabefelder sind jetzt schmaler */
+            padding: 10px;
+            margin: 10px 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .input-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Wenn der Platz knapp wird, stapeln sich die Felder */
+            width: 100%;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Gebe Koordinaten an!</h2>
+        <audio controls>
+            <source src="./sstv_robot36.wav" type="audio/wav">
+            Dein Browser unterstützt kein Audio-Element.
+        </audio>
+        <div class="input-group">
+            <input type="text" id="box1" maxlength="2">
+            <input type="text" id="box2" maxlength="2">
+            <input type="text" id="box3" maxlength="2">
+        </div>
+        <button onclick="checkInput()">Absenden</button>
+    </div>
+
+    <script>
+    function checkInput() {
+        const correctValues1 = ['N', '6', '/']; // Erste korrekte Kombination
+        const correctValues2 = ['10', 'B6', '/1']; // Zweite korrekte Kombination
+        let inputs = [
+            document.getElementById('box1'),
+            document.getElementById('box2'),
+            document.getElementById('box3')
+        ];
+        let isCorrect = false;
+        
+        // Überprüfen, ob die Eingabe einer der beiden korrekten Kombinationen entspricht
+        if (
+            (inputs[0].value === correctValues1[0] && inputs[1].value === correctValues1[1] && inputs[2].value === correctValues1[2]) ||
+            (inputs[0].value === correctValues2[0] && inputs[1].value === correctValues2[1] && inputs[2].value === correctValues2[2])
+        ) {
+            isCorrect = true;
+        }
+
+        // Wenn die Eingabe korrekt ist, leite zur Google-Seite weiter
+        if (isCorrect) {
+            window.location.href = './tfp.html';
+        } else {
+            // Andernfalls, ändere die Hintergrundfarbe der Felder
+            inputs.forEach((input, index) => {
+                if (
+                    (input.value === correctValues1[index] || input.value === correctValues2[index]) 
+                ) {
+                    input.style.backgroundColor = 'lightgreen';
+                } else {
+                    input.style.backgroundColor = 'lightcoral';
+                }
+            });
+        }
+    }
+	</script>
+
+</body>
+</html>
