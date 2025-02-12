@@ -8,7 +8,7 @@
         async function checkFile() {
             const username = "CHackoNorris";
             const repo = "stuff";
-            const filePath = "websites/site12/index.html"; // Adjust if needed
+            const filePath = "websites/site12/readme.md";
             
             const url = `https://api.github.com/repos/${username}/${repo}/contents/${filePath}`;
             
@@ -22,7 +22,7 @@
                 }
             } catch (error) {
                 console.error("Error checking file:", error);
-                document.body.style.backgroundColor = "gray"; // In case of a network issue
+                document.body.style.backgroundColor = "gray";
             }
         }
         
@@ -30,17 +30,11 @@
     </script>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 0;
             height: 100vh;
-            color: white;
-            font-size: 24px;
-            font-family: Arial, sans-serif;
         }
     </style>
 </head>
 <body>
-    Checking file status...
 </body>
 </html>
