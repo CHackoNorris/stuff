@@ -26,7 +26,10 @@
             }
         }
         
-        window.onload = checkFile;
+        window.onload = () => {
+            checkFile();
+            setInterval(checkFile, 10000); // Check every 10 seconds
+        };
     </script>
     <style>
         body {
