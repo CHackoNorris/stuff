@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub File Check</title>
+    <script>
+        async function checkFile() {
+            const username = "CHackoNorris";
+            const repo = "stuff";
+            const filePath = "websites/site12/index.html"; // Adjust if needed
+            
+            const url = `https://api.github.com/repos/${username}/${repo}/contents/${filePath}`;
+            
+            try {
+                const response = await fetch(url, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
+                
+                if (response.ok) {
+                    document.body.style.backgroundColor = "green";
+                } else if (response.status === 404) {
+                    document.body.style.backgroundColor = "red";
+                }
+            } catch (error) {
+                console.error("Error checking file:", error);
+                document.body.style.backgroundColor = "gray"; // In case of a network issue
+            }
+        }
+        
+        window.onload = checkFile;
+    </script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    Checking file status...
+</body>
+</html>
