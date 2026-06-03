@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compile – Protokoll Generator</title>
+<style>
+  :root {
+    --bg: #050810;
+    --surface: #0b1120;
+    --border: #1a2a4a;
+    --accent-purple: #7c3aed;
+    --accent-gold: #d4a017;
+    --accent-cyan: #00d4ff;
+    --text: #c8d8f0;
+    --text-dim: #4a6080;
+    --glow-cyan: rgba(0,212,255,0.3);
+    --mono: 'Courier New', Courier, monospace;
+    --sans: 'Trebuchet MS', Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-x: hidden;
+    position: relative;
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    width: min(640px, 100%);
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .logo-line {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--accent-cyan);
+    letter-spacing: 0.25em;
+    opacity: 0.7;
+    margin-bottom: 0.4rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 8vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent-cyan) 60%, var(--accent-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+
+  .subtitle {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.2em;
+    margin-top: 0.4rem;
+  }
+
+  /* Filter */
+  .filter-section {
+    margin-bottom: 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.3em;
+    margin-bottom: 0.75rem;
+  }
+
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn.on {
+    color: #050810;
+  }
+
+  /* Cards */
+  .cards-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: border-color 0.4s, box-shadow 0.4s;
+    min-height: 72px;
+  }
+
+  .card.active {
+    border-color: var(--cc, var(--accent-cyan));
+    box-shadow: 0 0 16px var(--cg, var(--glow-cyan));
+  }
+
+  .card-slot {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    letter-spacing: 0.2em;
+    min-width: 3.5rem;
+  }
+
+  .card-icon {
+    font-size: 1.6rem;
+    width: 2rem;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .card-info { flex: 1; }
+
+  .card-name-de {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cc, var(--text-dim));
+    transition: color 0.3s;
+  }
+
+  .card-name-en {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    margin-top: 0.2rem;
+  }
+
+  .card-edition-tag {
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  /* Button */
+  .btn-generate {
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    border: 1px solid var(--accent-cyan);
+    color: var(--accent-cyan);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+    margin-bottom: 0.75rem;
+  }
+
+  .btn-generate:hover:not(:disabled) {
+    background: rgba(0,212,255,0.08);
+    box-shadow: 0 0 20px var(--glow-cyan);
+  }
+
+  .btn-generate:active:not(:disabled) { transform: scale(0.98); }
+  .btn-generate:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* Stats */
+  .stats {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--border);
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .stats b { color: var(--accent-cyan); }
+
+  /* History */
+  .history-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem;
+  }
+
+  .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .btn-clear {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    cursor: pointer;
+    letter-spacing: 0.2em;
+    transition: color 0.2s;
+  }
+  .btn-clear:hover { color: #ff5555; }
+
+  .history-list { display: flex; flex-direction: column; gap: 0.35rem; }
+
+  .history-item {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.5rem;
+    border-left: 2px solid var(--border);
+  }
+  .history-item.latest {
+    border-left-color: var(--accent-cyan);
+    color: var(--text);
+  }
+
+  .history-empty {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    opacity: 0.45;
+    letter-spacing: 0.15em;
+  }
+
+  /* Player toggle */
+  .mode-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1.2rem;
+  }
+
+  .mode-btn {
+    flex: 1;
+    padding: 0.65rem 0.5rem;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .mode-btn.active {
+    background: rgba(0,212,255,0.12);
+    color: var(--accent-cyan);
+    box-shadow: inset 0 0 12px rgba(0,212,255,0.1);
+  }
+
+  .mode-divider {
+    width: 1px;
+    height: 2.2rem;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  /* Player section headers */
+  .player-header {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    padding: 0.3rem 0.5rem;
+    border-radius: 2px;
+    margin-bottom: 0.5rem;
+    display: none;
+  }
+
+  .player-header.p1 { color: #00d4ff; border-left: 2px solid #00d4ff; background: rgba(0,212,255,0.05); }
+  .player-header.p2 { color: #ff6b6b; border-left: 2px solid #ff6b6b; background: rgba(255,107,107,0.05); margin-top: 0.75rem; }
+
+  .two-player .player-header { display: block; }
+
+  /* In 2-player mode, P2 cards get red accent */
+  .two-player .card.active.p2 {
+    --cc: #ff6b6b;
+    --cg: rgba(255,107,107,0.3);
+  }
+
+  @keyframes rolling {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .card.rolling .card-name-de { animation: rolling 0.15s infinite; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo-line">// SYSTEM BOOT 0x4F4B //</div>
+    <h1>Compile</h1>
+    <div class="subtitle">PROTOKOLL-GENERATOR V1.0</div>
+  </header>
+
+  <div class="filter-section">
+    <div class="section-label">// EDITIONEN WÄHLEN</div>
+    <div class="filter-buttons" id="filterButtons"></div>
+  </div>
+
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="btn1P">1 SPIELER &nbsp;&middot;&nbsp; 3 PROTOKOLLE</button>
+    <div class="mode-divider"></div>
+    <button class="mode-btn" id="btn2P">2 SPIELER &nbsp;&middot;&nbsp; 6 PROTOKOLLE</button>
+  </div>
+
+  <div id="cardsWrapper">
+    <div class="player-header p1">// SPIELER 1</div>
+    <div class="cards-area" id="cardsArea"></div>
+    <div class="player-header p2">// SPIELER 2</div>
+    <div class="cards-area" id="cardsArea2"></div>
+  </div>
+
+  <button class="btn-generate" id="btnGenerate">[ PROTOKOLLE KOMPILIEREN ]</button>
+
+  <div class="stats">
+    <span>VERFÜGBAR: <b id="statAvail">30</b></span>
+    <span>GENERIERT: <b id="statCount">0</b>&times;</span>
+    <span>KOMBINATIONEN: <b id="statCombos">4060</b></span>
+  </div>
+
+  <div class="history-section">
+    <div class="history-header">
+      <div class="section-label" style="margin:0">// VERLAUF</div>
+      <button class="btn-clear" id="btnClear">[ LÖSCHEN ]</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="history-empty">Noch keine Generierungen...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+var PROTOCOLS = [
+  {de:'Dunkelheit',en:'Darkness',icon:'🌑',ed:'purple'},
+  {de:'Tod',en:'Death',icon:'💀',ed:'purple'},
+  {de:'Feuer',en:'Fire',icon:'🔥',ed:'purple'},
+  {de:'Gravitation',en:'Gravity',icon:'⚫',ed:'purple'},
+  {de:'Leben',en:'Life',icon:'🌿',ed:'purple'},
+  {de:'Licht',en:'Light',icon:'✦',ed:'purple'},
+  {de:'Metall',en:'Metal',icon:'⚙',ed:'purple'},
+  {de:'Seuche',en:'Plague',icon:'☣',ed:'purple'},
+  {de:'Psyche',en:'Psychic',icon:'🧠',ed:'purple'},
+  {de:'Geschwindigkeit',en:'Speed',icon:'⚡',ed:'purple'},
+  {de:'Geist',en:'Spirit',icon:'👁',ed:'purple'},
+  {de:'Wasser',en:'Water',icon:'💧',ed:'purple'},
+  {de:'Gleichgültigkeit',en:'Apathy',icon:'😶',ed:'purple-ext'},
+  {de:'Hass',en:'Hate',icon:'🔴',ed:'purple-ext'},
+  {de:'Liebe',en:'Love',icon:'♥',ed:'purple-ext'},
+  {de:'Chaos',en:'Chaos',icon:'🌀',ed:'gold'},
+  {de:'Klarheit',en:'Clarity',icon:'◇',ed:'gold'},
+  {de:'Korruption',en:'Corruption',icon:'☠',ed:'gold'},
+  {de:'Mut',en:'Courage',icon:'🦁',ed:'gold'},
+  {de:'Furcht',en:'Fear',icon:'🌫',ed:'gold'},
+  {de:'Eis',en:'Ice',icon:'❄',ed:'gold'},
+  {de:'Glück',en:'Luck',icon:'★',ed:'gold'},
+  {de:'Spiegel',en:'Mirror',icon:'◑',ed:'gold'},
+  {de:'Frieden',en:'Peace',icon:'☮',ed:'gold'},
+  {de:'Rauch',en:'Smoke',icon:'💨',ed:'gold'},
+  {de:'Zeit',en:'Time',icon:'⌛',ed:'gold'},
+  {de:'Krieg',en:'War',icon:'⚔',ed:'gold'},
+  {de:'Assimilation',en:'Assimilation',icon:'◎',ed:'gold-ext'},
+  {de:'Einheit',en:'Unity',icon:'⬡',ed:'gold-ext'},
+  {de:'Vielfalt',en:'Diversity',icon:'✺',ed:'gold-ext'},
+  {de:'Hochmut',en:'Pride',icon:'👑',ed:'red'},
+  {de:'Neid',en:'Envy',icon:'💚',ed:'red'},
+  {de:'Zorn',en:'Wrath',icon:'🔥',ed:'red'},
+  {de:'Völlerei',en:'Gluttony',icon:'🍖',ed:'red'},
+  {de:'Wolllust',en:'Lust',icon:'🌹',ed:'red'},
+  {de:'Gier',en:'Greed',icon:'💰',ed:'red'},
+  {de:'Faulheit',en:'Sloth',icon:'🦥',ed:'red'},
+  {de:'Hinterhalt',en:'Ambush',icon:'🗡️',ed:'red'},
+  {de:'Drehpunkt',en:'Fulcrum',icon:'⚖️',ed:'red'},
+  {de:'Überwältigung',en:'Overwhelm',icon:'🌊',ed:'red'},
+  {de:'Schwung',en:'Momentum',icon:'⚡',ed:'red'},
+  {de:'Nova',en:'Nova',icon:'💥',ed:'red'}
+];
+
+var EDITIONS = [
+  {id:'purple',   label:'Purple Edition',                  color:'#7c3aed', glow:'rgba(124,58,237,0.4)',  tag:'PURPLE'},
+  {id:'purple-ext',label:'Gleichgültigkeit · Hass · Liebe',color:'#9d5ffa', glow:'rgba(157,95,250,0.4)', tag:'PURPLE+'},
+  {id:'gold',     label:'Gold Edition',                    color:'#d4a017', glow:'rgba(212,160,23,0.4)',  tag:'GOLD'},
+  {id:'gold-ext', label:'Assimilation · Einheit · Vielfalt',color:'#f0c040',glow:'rgba(240,192,64,0.4)', tag:'GOLD+'},
+  {id:'red',     label:'Red Edition',                    color:'#ff2400', glow:'rgba(255,36,0,0.4)',  tag:'RED'}
+];
+
+var activeEds = {purple:true,'purple-ext':true,gold:true,'gold-ext':true};
+var genCount = 0;
+var history = [];
+var rolling = false;
+var twoPlayer = false;
+
+function edInfo(id) {
+  for (var i=0;i<EDITIONS.length;i++) if (EDITIONS[i].id===id) return EDITIONS[i];
+  return EDITIONS[0];
+}
+
+function available() {
+  return PROTOCOLS.filter(function(p){ return activeEds[p.ed]; });
+}
+
+function nCr(n,r) {
+  if (r>n) return 0;
+  var res=1;
+  for (var i=0;i<r;i++) res=res*(n-i)/(i+1);
+  return Math.round(res);
+}
+
+function updateStats() {
+  var av = available();
+  var slots = twoPlayer ? 6 : 3;
+  document.getElementById('statAvail').textContent = av.length;
+  document.getElementById('statCount').textContent = genCount;
+  document.getElementById('statCombos').textContent = nCr(av.length, slots).toLocaleString('de-DE');
+}
+
+// Build filter buttons
+var fb = document.getElementById('filterButtons');
+EDITIONS.forEach(function(ed) {
+  var btn = document.createElement('button');
+  btn.className = 'filter-btn on';
+  btn.textContent = ed.label;
+  btn.style.background = ed.color;
+  btn.style.borderColor = ed.color;
+  btn.style.color = '#050810';
+  btn.dataset.ed = ed.id;
+  btn.addEventListener('click', function() {
+    var eid = btn.dataset.ed;
+    var minSlots = twoPlayer ? 6 : 3;
+    if (activeEds[eid]) {
+      var remaining = available().filter(function(p){ return p.ed !== eid; });
+      if (remaining.length < minSlots) return;
+      activeEds[eid] = false;
+      btn.className = 'filter-btn';
+      btn.style.background = 'transparent';
+      btn.style.color = '';
+    } else {
+      activeEds[eid] = true;
+      btn.className = 'filter-btn on';
+      btn.style.background = ed.color;
+      btn.style.borderColor = ed.color;
+      btn.style.color = '#050810';
+    }
+    updateStats();
+  });
+  fb.appendChild(btn);
+});
+
+// Build cards for both areas
+function buildCards(areaId, prefix, count) {
+  var area = document.getElementById(areaId);
+  area.innerHTML = '';
+  for (var i=0;i<count;i++) {
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.id = prefix+i;
+    var slotNum = i+1;
+    card.innerHTML =
+      '<div class="card-slot">// SLOT 0'+slotNum+'</div>'+
+      '<div class="card-icon">◈</div>'+
+      '<div class="card-info">'+
+        '<div class="card-name-de">— — —</div>'+
+        '<div class="card-name-en">awaiting input</div>'+
+      '</div>'+
+      '<div class="card-edition-tag"></div>';
+    area.appendChild(card);
+  }
+}
+
+buildCards('cardsArea', 'card', 3);
+buildCards('cardsArea2', 'card2_', 3);
+document.getElementById('cardsArea2').style.display = 'none';
+
+// Player mode toggle
+document.getElementById('btn1P').addEventListener('click', function() {
+  if (!twoPlayer) return;
+  twoPlayer = false;
+  document.getElementById('btn1P').className = 'mode-btn active';
+  document.getElementById('btn2P').className = 'mode-btn';
+  document.getElementById('cardsWrapper').className = '';
+  document.getElementById('cardsArea2').style.display = 'none';
+  buildCards('cardsArea', 'card', 3);
+  buildCards('cardsArea2', 'card2_', 3);
+  updateStats();
+});
+
+document.getElementById('btn2P').addEventListener('click', function() {
+  if (twoPlayer) return;
+  twoPlayer = true;
+  document.getElementById('btn2P').className = 'mode-btn active';
+  document.getElementById('btn1P').className = 'mode-btn';
+  document.getElementById('cardsWrapper').className = 'two-player';
+  document.getElementById('cardsArea2').style.display = 'flex';
+  buildCards('cardsArea', 'card', 3);
+  buildCards('cardsArea2', 'card2_', 3);
+  updateStats();
+});
+
+function setCard(id, p, isP2) {
+  var card = document.getElementById(id);
+  if (!card) return;
+  var ei = edInfo(p.ed);
+  card.className = 'card active' + (isP2 ? ' p2' : '');
+  if (!isP2) {
+    card.style.setProperty('--cc', ei.color);
+    card.style.setProperty('--cg', ei.glow);
+  } else {
+    card.style.removeProperty('--cc');
+    card.style.removeProperty('--cg');
+  }
+  card.querySelector('.card-icon').textContent = p.icon;
+  card.querySelector('.card-name-de').textContent = p.de;
+  card.querySelector('.card-name-en').textContent = p.en;
+  card.querySelector('.card-edition-tag').textContent = ei.tag;
+}
+
+function resetCard(id) {
+  var card = document.getElementById(id);
+  if (!card) return;
+  card.className = 'card rolling';
+  card.style.removeProperty('--cc');
+  card.style.removeProperty('--cg');
+  card.querySelector('.card-icon').textContent = '◈';
+  card.querySelector('.card-name-de').textContent = '— — —';
+  card.querySelector('.card-name-en').textContent = '...';
+  card.querySelector('.card-edition-tag').textContent = '';
+}
+
+function generate() {
+  if (rolling) return;
+  var av = available();
+  var slots = twoPlayer ? 6 : 3;
+  if (av.length < slots) return;
+  rolling = true;
+  document.getElementById('btnGenerate').disabled = true;
+
+  var shuffled = av.slice().sort(function(){ return Math.random()-0.5; });
+  var chosen = shuffled.slice(0, slots);
+
+  // Reset all cards
+  for (var i=0;i<3;i++) resetCard('card'+i);
+  if (twoPlayer) for (var j=0;j<3;j++) resetCard('card2_'+j);
+
+  var tick = 0;
+  var total = twoPlayer ? 28 : 20;
+  var settleAt = [];
+  if (!twoPlayer) {
+    settleAt = [total-8, total-4, total];
+  } else {
+    settleAt = [total-16, total-12, total-8, total-4, total-2, total];
+  }
+
+  var timer = setInterval(function() {
+    tick++;
+    var pool = available();
+
+    // Flicker unsettled cards
+    for (var i=0;i<slots;i++) {
+      if (tick < settleAt[i]) {
+        var rnd = pool[Math.floor(Math.random()*pool.length)];
+        var cid = i < 3 ? 'card'+i : 'card2_'+(i-3);
+        var el = document.getElementById(cid);
+        if (el) el.querySelector('.card-name-de').textContent = rnd.de;
+      }
+    }
+
+    // Settle cards one by one
+    for (var k=0;k<slots;k++) {
+      if (tick === settleAt[k]) {
+        var isP2 = k >= 3;
+        var cid2 = k < 3 ? 'card'+k : 'card2_'+(k-3);
+        setCard(cid2, chosen[k], isP2);
+      }
+    }
+
+    if (tick === total) {
+      clearInterval(timer);
+      rolling = false;
+      document.getElementById('btnGenerate').disabled = false;
+      genCount++;
+
+      var p1 = chosen.slice(0,3).map(function(p){return p.de;}).join(' · ');
+      var entry = twoPlayer
+        ? 'S1: '+p1+' | S2: '+chosen.slice(3).map(function(p){return p.de;}).join(' · ')
+        : p1;
+      history.unshift(entry);
+      if (history.length > 8) history.pop();
+      renderHistory();
+      updateStats();
+    }
+  }, 80);
+}
+
+function renderHistory() {
+  var list = document.getElementById('historyList');
+  if (history.length === 0) {
+    list.innerHTML = '<div class="history-empty">Noch keine Generierungen...</div>';
+    return;
+  }
+  list.innerHTML = history.map(function(h,i){
+    return '<div class="history-item'+(i===0?' latest':'')+'">'+
+      (i===0?'▶ ':'')+h+'</div>';
+  }).join('');
+}
+
+document.getElementById('btnGenerate').addEventListener('click', generate);
+document.getElementById('btnClear').addEventListener('click', function() {
+  history = [];
+  genCount = 0;
+  renderHistory();
+  updateStats();
+});
+
+updateStats();
+</script>
+</body>
+</html>
