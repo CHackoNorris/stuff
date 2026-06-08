@@ -1,0 +1,407 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+  :root {
+    --gold: #C9A227;
+    --gold-light: #F0D080;
+    --gold-dark: #7A6010;
+    --purple: #7B5EA7;
+    --purple-light: #B89FD8;
+    --purple-dark: #3D2E54;
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: rgba(255,255,255,0.08);
+    --text: #e8e8f0;
+    --muted: #888899;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  #app {
+    font-family: 'Rajdhani', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .header p {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-top: 4px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-btn {
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+  .filter-btn.active-all { color: var(--text); border-color: rgba(255,255,255,0.4); background: var(--surface2); }
+  .filter-btn.active-gold { color: var(--gold); border-color: var(--gold); background: rgba(201,162,39,0.08); }
+  .filter-btn.active-purple { color: var(--purple-light); border-color: var(--purple); background: rgba(123,94,167,0.12); }
+
+  .search-input {
+    flex: 1;
+    min-width: 180px;
+    padding: 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: rgba(255,255,255,0.25); }
+  .search-input::placeholder { color: var(--muted); }
+
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .stats-bar span { color: var(--text); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .card.gold::before { background: var(--gold); }
+  .card.purple::before { background: var(--purple); }
+
+  .card:hover { background: var(--surface2); border-color: rgba(255,255,255,0.15); transform: translateY(-1px); }
+  .card.selected { background: var(--surface2); }
+  .card.selected.gold { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold-dark) inset; }
+  .card.selected.purple { border-color: var(--purple); box-shadow: 0 0 0 1px var(--purple-dark) inset; }
+  .card.eliminated { opacity: 0.3; pointer-events: none; }
+
+  .card-edition {
+    font-size: 10px;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .card.gold .card-edition { color: var(--gold); }
+  .card.purple .card-edition { color: var(--purple-light); }
+
+  .card-name {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 5px;
+  }
+
+  .card-slogan {
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+  .tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    font-family: 'Share Tech Mono', monospace;
+  }
+  .card.gold .tag { background: rgba(201,162,39,0.15); color: var(--gold-light); }
+  .card.purple .tag { background: rgba(123,94,167,0.2); color: var(--purple-light); }
+
+  .check-mark {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    opacity: 0;
+    transition: opacity 0.1s;
+  }
+  .card.selected .check-mark { opacity: 1; }
+  .card.selected.gold .check-mark { background: var(--gold); color: #000; }
+  .card.selected.purple .check-mark { background: var(--purple); color: #fff; }
+
+  .selection-panel {
+    margin-top: 24px;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+  .selection-panel h2 {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: 'Share Tech Mono', monospace;
+    margin-bottom: 12px;
+  }
+  .selected-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 32px;
+  }
+  .selected-chip {
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    transition: opacity 0.1s;
+  }
+  .selected-chip:hover { opacity: 0.7; }
+  .selected-chip.gold { background: rgba(201,162,39,0.15); color: var(--gold-light); border: 1px solid var(--gold-dark); }
+  .selected-chip.purple { background: rgba(123,94,167,0.15); color: var(--purple-light); border: 1px solid var(--purple-dark); }
+  .selected-chip .remove { font-size: 14px; color: var(--muted); }
+
+  .panel-actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+  .action-btn {
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .action-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.3); }
+  .action-btn.danger:hover { color: #f08080; border-color: #f08080; }
+
+  .empty-msg {
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-style: italic;
+  }
+
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+  }
+</style>
+
+<div id="app">
+  <div class="header">
+    <h1>COMPILE</h1>
+    <p>// DRAFT ASSISTANT — PROTOKOLL AUSWAHL</p>
+  </div>
+
+  <div class="controls">
+    <button class="filter-btn active-all" id="btn-all" onclick="setFilter('all')">ALLE</button>
+    <button class="filter-btn" id="btn-gold" onclick="setFilter('gold')">◆ GOLD</button>
+    <button class="filter-btn" id="btn-purple" onclick="setFilter('purple')">◈ PURPLE</button>
+    <input class="search-input" type="text" placeholder="suche protokoll..." oninput="setSearch(this.value)" />
+  </div>
+
+  <div class="stats-bar" id="stats-bar"></div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="selection-panel" id="selection-panel">
+    <h2>// AUSGEWÄHLTE PROTOKOLLE</h2>
+    <div class="selected-list" id="selected-list"></div>
+    <div class="panel-actions">
+      <button class="action-btn" onclick="sendDraft()">DRAFT SENDEN ↗</button>
+      <button class="action-btn danger" onclick="clearAll()">ALLE LÖSCHEN</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CARDS = [
+  {id:0,name:"CHAOS",slogan:"UNBRECHBAR. PASS AUF!",tags:["ZIEHEN","ANORDNEN","BLOCKIERT"],edition:"gold"},
+  {id:1,name:"EINHEIT",slogan:"GEMEINSAM SIND WIR STARK.",tags:["BLOCKIERT","UMDREHEN","KOMPILIEREN"],edition:"gold"},
+  {id:2,name:"KRIEG",slogan:"SIEG UM JEDEN PREIS?",tags:["REAGIEREN","ABWERFEN"],edition:"gold"},
+  {id:3,name:"TAPFERKEIT",slogan:"ICH TROTZE DER GEFAHR.",tags:["ZIEHEN","VERGLEICHEN"],edition:"gold"},
+  {id:4,name:"SPIEGEL",slogan:"EIN SPIEGELBILD DER WAHRHEIT.",tags:["VERSCHIEBEN","WIEDERHOLEN"],edition:"gold"},
+  {id:5,name:"GLÜCK",slogan:"ALLES AUF ROT!",tags:["ZUFALL","ENTFERNEN","SPIELEN"],edition:"gold"},
+  {id:6,name:"RAUCH",slogan:"EIN SCHLEIER DER VERWIRRUNG.",tags:["VERDECKT","VERSCHIEBEN"],edition:"gold"},
+  {id:7,name:"VIELFALT",slogan:"UNTERSCHIEDE MACHEN UNS STARK.",tags:["SPIELEN","VERGLEICHEN","KOMPILIEREN"],edition:"gold"},
+  {id:8,name:"KLARHEIT",slogan:"MEIN WEG LIEGT KLAR VOR MIR.",tags:["ZIEHEN","VORZEIGEN"],edition:"gold"},
+  {id:9,name:"ASSIMILATION",slogan:"WIDERSTAND IST ZWECKLOS.",tags:["TAUSCHEN","SPIELEN"],edition:"gold"},
+  {id:10,name:"FRIEDEN",slogan:"EIN AUGENBLICK DER RUHE.",tags:["BEIDSEITIGES ABWERFEN","ZIEHEN"],edition:"gold"},
+  {id:11,name:"ZEIT",slogan:"ZURÜCK IN DIE ZUKUNFT.",tags:["ABWERFEN","ABLAGESTAPEL"],edition:"gold"},
+  {id:12,name:"KORRUPTION",slogan:"EIN FAULER APFEL VERDIRBT DEN GANZEN KORB.",tags:["UMDREHEN","ABWERFEN"],edition:"gold"},
+  {id:13,name:"FURCHT",slogan:"FLIEHT, IHR NARREN!",tags:["VERSCHIEBEN","ABWERFEN"],edition:"gold"},
+  {id:14,name:"EIS",slogan:"KALT, GLATT, GNADENLOS.",tags:["VERSCHIEBEN","VERHINDERN"],edition:"gold"},
+  {id:15,name:"SCHWERKRAFT",slogan:"VERSCHLINGE ALLES.",tags:["VERSCHIEBEN","UMDREHEN","ZIEHEN"],edition:"purple"},
+  {id:16,name:"METALL",slogan:"FÜR ALLES GEWAPPNET.",tags:["VERHINDERN","ZIEHEN","UMDREHEN"],edition:"purple"},
+  {id:17,name:"LEBEN",slogan:"SCHAFFE NEUES WACHSTUM.",tags:["UMDREHEN","SPIELEN VOM DECK","ZIEHEN"],edition:"purple"},
+  {id:18,name:"GEIST",slogan:"WAHRE STÄRKE KOMMT VON INNEN.",tags:["UMDREHEN","VERSCHIEBEN","ZIEHEN"],edition:"purple"},
+  {id:19,name:"DUNKELHEIT",slogan:"EINE WELT OHNE LICHT.",tags:["ZIEHEN","VERSCHIEBEN","MANIPULIEREN"],edition:"purple"},
+  {id:20,name:"GESCHWINDIGKEIT",slogan:"MIT JEDEM SCHRITT SCHNELLER.",tags:["ZIEHEN","SPIELEN","VERSCHIEBEN"],edition:"purple"},
+  {id:21,name:"WASSER",slogan:"REINIGE UND ERNEUERE.",tags:["ZURÜCKNEHMEN","ZIEHEN","UMDREHEN"],edition:"purple"},
+  {id:22,name:"PSYCHE",slogan:"DURCHDRINGE DEN VERSTAND.",tags:["ZIEHEN","MANIPULIEREN","VERSCHIEBEN"],edition:"purple"},
+  {id:23,name:"LICHT",slogan:"VERSENGE DIE DUNKELHEIT.",tags:["ZIEHEN","UMDREHEN","VERSCHIEBEN"],edition:"purple"},
+  {id:24,name:"HASS",slogan:"ENDLOSE VERACHTUNG.",tags:["ENTFERNEN"],edition:"purple"},
+  {id:25,name:"LIEBE",slogan:"GEBEN IST SCHÖNER ALS NEHMEN.",tags:["ZIEHEN","VERSCHENKEN","AUSTAUSCHEN"],edition:"purple"},
+  {id:26,name:"TOD",slogan:"NICHTS WIRD ÜBERLEBEN.",tags:["ENTFERNEN","ZIEHEN"],edition:"purple"},
+  {id:27,name:"SEUCHE",slogan:"TOD VON INNEN HERAUS.",tags:["ERZWUNGENES ABWERFEN","UMDREHEN"],edition:"purple"},
+  {id:28,name:"FEUER",slogan:"TUT BEIDEN SEITEN WEH.",tags:["KARTEN FÜR EFFEKTE ABWERFEN"],edition:"purple"},
+  {id:29,name:"GLEICHGÜLTIGKEIT",slogan:"UNBETEILIGT UND GEFÜHLLOS.",tags:["OFFENE KARTEN UMDREHEN"],edition:"purple"},
+];
+
+let selected = new Set();
+let filter = 'all';
+let search = '';
+
+function setFilter(f) {
+  filter = f;
+  document.getElementById('btn-all').className = 'filter-btn' + (f==='all'?' active-all':'');
+  document.getElementById('btn-gold').className = 'filter-btn' + (f==='gold'?' active-gold':'');
+  document.getElementById('btn-purple').className = 'filter-btn' + (f==='purple'?' active-purple':'');
+  render();
+}
+
+function setSearch(v) {
+  search = v.toLowerCase();
+  render();
+}
+
+function toggleCard(id) {
+  if (selected.has(id)) selected.delete(id);
+  else selected.add(id);
+  render();
+}
+
+function clearAll() {
+  selected.clear();
+  render();
+}
+
+function sendDraft() {
+  const names = [...selected].map(id => CARDS[id].name).join(', ');
+  if (!names) return;
+  sendPrompt('Erkläre mir die Synergien zwischen diesen Compile-Protokollen: ' + names);
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  const visible = CARDS.filter(c => {
+    if (filter !== 'all' && c.edition !== filter) return false;
+    if (search && !c.name.toLowerCase().includes(search) && !c.tags.join(' ').toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  document.getElementById('stats-bar').innerHTML =
+    `<span>${visible.length}</span> / ${CARDS.length} PROTOKOLLE &nbsp;|&nbsp; AUSGEWÄHLT: <span>${selected.size}</span>`;
+
+  if (!visible.length) {
+    grid.innerHTML = '<div class="no-results">// KEINE PROTOKOLLE GEFUNDEN</div>';
+  } else {
+    grid.innerHTML = visible.map(c => `
+      <div class="card ${c.edition} ${selected.has(c.id)?'selected':''}" onclick="toggleCard(${c.id})">
+        <div class="check-mark">✓</div>
+        <div class="card-edition">${c.edition === 'gold' ? '◆ GOLD' : '◈ PURPLE'}</div>
+        <div class="card-name">${c.name}</div>
+        <div class="card-slogan">${c.slogan}</div>
+        <div class="card-tags">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+    `).join('');
+  }
+
+  const selList = document.getElementById('selected-list');
+  if (selected.size === 0) {
+    selList.innerHTML = '<span class="empty-msg">// KEINE PROTOKOLLE AUSGEWÄHLT</span>';
+  } else {
+    selList.innerHTML = [...selected].map(id => {
+      const c = CARDS[id];
+      return `<div class="selected-chip ${c.edition}" onclick="toggleCard(${c.id})">
+        ${c.name} <span class="remove">×</span>
+      </div>`;
+    }).join('');
+  }
+}
+
+render();
+</script>
